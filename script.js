@@ -1,3 +1,5 @@
+const delimiterHeight = 4;
+
 function draw() {
   var canvas = document.getElementById('canvas');
   if(!canvas.getContext) return;
@@ -5,7 +7,7 @@ function draw() {
 
   const lanes = 2;
   const laneHeight = 50;
-  const roadHeight = lanes * laneHeight + (lanes - 1) * 4;
+  const roadHeight = lanes * laneHeight + (lanes - 1) * delimiterHeight;
 
   canvas.setAttribute('width', 300);
   canvas.setAttribute('height', roadHeight);
@@ -15,13 +17,13 @@ function draw() {
   ctx.fill(road);
 
   for (let i = 0; i < lanes + 1; i++) {
-    drawDashedPath(ctx, laneHeight + laneHeight * i + 4 * i);
+    drawDashedPath(ctx, laneHeight + laneHeight * i + delimiterHeight * i);
   }
 }
 
 function drawDashedPath(ctx, start) {
   for (let i = 0; i < 20; i++) {
     ctx.fillStyle = 'white';
-    ctx.fillRect(i * 16, start, 8, 4);
+    ctx.fillRect(i * 16, start, 8, delimiterHeight);
   }
 }
