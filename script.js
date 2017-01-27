@@ -28,7 +28,7 @@ function draw() {
 function drawDashedPath(ctx, start) {
   for (let i = 0; i < 20; i++) {
     ctx.fillStyle = 'white';
-    ctx.fillRect(i * 16, start, 8, DELIMITER_HEIGHT);
+    ctx.fillRect(i * 40, start, 20, DELIMITER_HEIGHT);
   }
 }
 
