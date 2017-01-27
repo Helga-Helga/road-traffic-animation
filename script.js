@@ -19,6 +19,8 @@ function draw() {
   for (let i = 0; i < lanes + 1; i++) {
     drawDashedPath(ctx, laneHeight + laneHeight * i + delimiterHeight * i);
   }
+
+  drawCar(ctx, 10, laneHeight / 6);
 }
 
 function drawDashedPath(ctx, start) {
@@ -26,4 +28,12 @@ function drawDashedPath(ctx, start) {
     ctx.fillStyle = 'white';
     ctx.fillRect(i * 16, start, 8, delimiterHeight);
   }
+}
+
+function drawCar(ctx, x, y) {
+ var car = new Image();
+ car.onload = function() {
+   ctx.drawImage(car, x, y, 30, 15);
+ };
+ car.src = 'pictures/car1.png';
 }
