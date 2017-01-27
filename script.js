@@ -3,7 +3,7 @@ const LANE_HEIGHT = 50;
 
 function draw() {
   const canvas = document.getElementById('canvas');
-  if(!canvas.getContext) return;
+  if (!canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
   const LANES = 2;
@@ -33,9 +33,9 @@ function drawDashedPath(ctx, start) {
 }
 
 function drawCar(ctx, x, y) {
- var car = new Image();
- car.onload = function() {
-   ctx.drawImage(car, x, y, 40, 20);
- };
- car.src = 'pictures/car1.png';
+  const car = new Image();
+  car.onload = () => {
+    ctx.drawImage(car, x, y, 40, 20);
+  };
+  car.src = 'pictures/car1.png';
 }
