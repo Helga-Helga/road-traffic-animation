@@ -9,7 +9,7 @@
         if (canvas.getContext){
           var ctx = canvas.getContext('2d');
 
-          var lanes = 2;
+          var lanes = 3;
           var laneHeight = 50;
           var roadHeight = lanes * laneHeight + (lanes - 1) * 4;
 
@@ -23,7 +23,7 @@
           for (var i = 0; i < lanes + 1; i++) {
             drawDashedPath(ctx, laneHeight + laneHeight * i + 4 * i);
           }
-          
+
           function drawDashedPath(ctx, start) {
             for (var i = 0; i < 20; i++) {
               ctx.fillStyle = 'white';
@@ -33,9 +33,6 @@
         }
       }
     </script>
-    <style type="text/css">
-      canvas { border: 1px solid black; }
-    </style>
   </head>
   <body onload="draw();">
     <canvas id="canvas"></canvas>
