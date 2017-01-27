@@ -37,5 +37,6 @@ function drawCar(ctx, x, y) {
   car.onload = () => {
     ctx.drawImage(car, x, y, 40, 20);
   };
-  car.src = 'pictures/car1.png';
+  const carsImages = ["1", "2", "3", "4", "5"];
+  car.src = "pictures/car" + carsImages[Math.round(Math.random() * (carsImages.length - 1))] + ".png";
 }
