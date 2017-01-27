@@ -17,11 +17,11 @@ function draw() {
   for (let i = 0; i < lanes + 1; i++) {
     drawDashedPath(ctx, laneHeight + laneHeight * i + 4 * i);
   }
+}
 
-  function drawDashedPath(ctx, start) {
-    for (let i = 0; i < 20; i++) {
-      ctx.fillStyle = 'white';
-      ctx.fillRect(i * 16, start, 8, 4);
-    }
+function drawDashedPath(ctx, start) {
+  for (let i = 0; i < 20; i++) {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(i * 16, start, 8, 4);
   }
 }
