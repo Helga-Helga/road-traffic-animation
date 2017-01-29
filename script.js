@@ -37,7 +37,7 @@ function drawDashedPath(ctx, start, width) {
 function drawCar(ctx, x, y) {
   const car = new Image();
   car.onload = () => {
-    ctx.drawImage(car, x, y, 40, 20);
+    ctx.drawImage(car, x, y, 200, 100);
   };
   const carsImages = ["1", "2", "3", "4", "5"];
   car.src = "pictures/car" + carsImages[Math.round(Math.random() * (carsImages.length - 1))] + ".png";
