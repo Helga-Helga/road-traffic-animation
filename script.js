@@ -2,6 +2,7 @@ const DELIMITER_HEIGHT = 10;
 const LANE_HEIGHT = 200;
 const DASH_WIDTH = 40;
 const DASH_SPACE_WIDTH = 80;
+let time = 0;
 
 function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
@@ -26,9 +27,12 @@ function redraw(ctx, roadHeight, lanes) {
   }
 
   for (let i = 0; i < lanes + 1; i++) {
-    const car = new Car(0, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`);
+    const vx = 1;
+    const car = new Car(time * vx, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`);
     car.draw(ctx);
   }
+  time++;
+  setTimeout(window.requestAnimationFrame.bind(window, redraw.bind(this, ctx, roadHeight, 2)), 20);
 }
 
 function drawDashedPath(ctx, start, width) {
@@ -51,5 +55,9 @@ class Car {
       const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
       ctx.drawImage(this.image, this.x, y, 200, 100);
     };
+  }
+
+  move(newX) {
+    this.x = newX;
   }
 }
