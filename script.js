@@ -34,17 +34,20 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   if (Math.random() < 1 / 50) {
     cars.push(new Car(-CAR_WIDTH, Math.random() * 10 + 1, Math.floor(Math.random() * (lanes + 1)), `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`));
   }
-  cars.forEach((car, i) => {
-    if (car.x > window.innerWidth - 20) {
+  cars.forEach((currentCar, i) => {
+    if (currentCar.x > window.innerWidth - 20) {
       delete cars[i];
       return;
     }
-    car.move(car.velocity);
-    car.velocity += (Math.random() - 0.5) * 2;
-    if (car.velocity < 0) {
-      car.velocity = 0;
+    currentCar.move(currentCar.velocity);
+    currentCar.velocity += (Math.random() - 0.5) * 2;
+    const isClose = cars
+      .filter((car) => {return car.lane === currentCar.lane && car !== currentCar})
+      .some((car) => {return currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5})
+    if (currentCar.velocity < 0 || isClose) {
+      currentCar.velocity = 0;
     }
-    car.draw(ctx);
+    currentCar.draw(ctx);
   });
 
   time++;
