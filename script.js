@@ -1,5 +1,7 @@
 const DELIMITER_HEIGHT = 10;
 const LANE_HEIGHT = 200;
+const DASH_WIDTH = 40;
+const DASH_SPACE_WIDTH = 80;
 
 function draw(lanes=2) {
   const canvas = document.getElementById('canvas');
