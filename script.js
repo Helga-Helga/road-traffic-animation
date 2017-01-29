@@ -34,13 +34,18 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
 
-  cars.forEach((car) => {
-    if (car.x < window.innerWidth - 20 - 100) {
-      car.move(car.velocity);
-      car.velocity += (Math.random() - 0.5) * 2;
-      if (car.velocity < 0) {
-        car.velocity = 0;
-      }
+  if (Math.random() < 1 / 50) {
+    cars.push(new Car(-50, Math.random() * 10 + 1, Math.round(Math.random() * lanes), `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
+  }
+  cars.forEach((car, i) => {
+    if (car.x > window.innerWidth - 20 - 100) {
+      delete cars[i];
+      return;
+    }
+    car.move(car.velocity);
+    car.velocity += (Math.random() - 0.5) * 2;
+    if (car.velocity < 0) {
+      car.velocity = 0;
     }
     car.draw(ctx);
   });
