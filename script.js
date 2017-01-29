@@ -3,6 +3,7 @@ const SCALE = 2;
 const DELIMITER_HEIGHT = 10 / SCALE;
 const LANE_HEIGHT = 200 / SCALE;
 const CAR_HEIGHT = LANE_HEIGHT / 2;
+const CAR_WIDTH = CAR_HEIGHT * 2;
 const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
@@ -34,11 +35,11 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
 
-  if (Math.random() < 1 / 50) {
-    cars.push(new Car(-50, Math.random() * 10 + 1, Math.round(Math.random() * lanes), `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
+  if (Math.random() < 1 / 20) {
+    cars.push(new Car(-CAR_WIDTH, Math.random() * 10 + 1, Math.floor(Math.random() * (lanes + 1)), `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`));
   }
   cars.forEach((car, i) => {
-    if (car.x > window.innerWidth - 20 - 100) {
+    if (car.x > window.innerWidth - 20) {
       delete cars[i];
       return;
     }
@@ -80,7 +81,7 @@ class Car {
       return;
     }
     const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
-    ctx.drawImage(this.image, this.x, y, CAR_HEIGHT * 2, CAR_HEIGHT);
+    ctx.drawImage(this.image, this.x, y, CAR_WIDTH, CAR_HEIGHT);
   }
 
   move(dx) {
