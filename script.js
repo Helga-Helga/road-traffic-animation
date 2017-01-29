@@ -14,9 +14,9 @@ function draw(lanes = 2) {
   init(canvas, roadHeight);
   const cars = [];
   for (let i = 0; i < lanes; i++) {
-    cars.push(new Car(- 50, Math.random() * 10 + 1, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
+    cars.push(new Car(-50, Math.random() * 10 + 1, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
   }
-  redraw(canvas.getContext('2d'), roadHeight, lanes, cars);
+  redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, cars);
 }
 
 function init(canvas, roadHeight) {
@@ -24,14 +24,14 @@ function init(canvas, roadHeight) {
   canvas.setAttribute('width', window.innerWidth - 20);
 }
 
-function redraw(ctx, roadHeight, lanes, cars) {
+function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   const road = new Path2D();
-  road.rect(0, 0, canvas.width, roadHeight);
+  road.rect(0, 0, roadWidth, roadHeight);
   ctx.fillStyle = 'gray';
   ctx.fill(road);
 
-  for (let i = 0; i < lanes + 1; i++) {
-    drawDashedPath(ctx, LANE_HEIGHT + LANE_HEIGHT * i + DELIMITER_HEIGHT * i, canvas.width);
+  for (let i = 0; i < lanes; i++) {
+    drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
 
   cars.forEach((car) => {
@@ -43,10 +43,11 @@ function redraw(ctx, roadHeight, lanes, cars) {
       }
     }
     car.draw(ctx);
-  })
+  });
 
   time++;
-  setTimeout(window.requestAnimationFrame.bind(window, redraw.bind(this, ctx, roadHeight, lanes, cars)), 1000 / 25);
+  const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
+  setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
 }
 
 function drawDashedPath(ctx, start, width) {
@@ -73,8 +74,8 @@ class Car {
     if (!this.imageLoaded) {
       return;
     }
-      const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
-      ctx.drawImage(this.image, this.x, y, CAR_HEIGHT * 2, CAR_HEIGHT);
+    const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
+    ctx.drawImage(this.image, this.x, y, CAR_HEIGHT * 2, CAR_HEIGHT);
   }
 
   move(dx) {
