@@ -66,7 +66,7 @@ class Car {
       ctx.drawImage(this.image, this.x, y, CAR_HEIGHT * 2, CAR_HEIGHT);
   }
 
-  move(newX) {
-    this.x = newX;
+  move(dx) {
+    this.x += dx;
   }
 }
