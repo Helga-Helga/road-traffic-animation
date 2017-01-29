@@ -13,11 +13,7 @@ function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
   const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
   init(canvas, roadHeight);
-  const cars = [];
-  for (let i = 0; i < lanes; i++) {
-    cars.push(new Car(-50, Math.random() * 10 + 1, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
-  }
-  redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, cars);
+  redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
 }
 
 function init(canvas, roadHeight) {
