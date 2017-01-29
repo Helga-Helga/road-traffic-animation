@@ -23,7 +23,8 @@ function draw(lanes=2) {
   }
 
   for (let i = 0; i < lanes + 1; i++) {
-    drawCar(ctx, 0, LANE_HEIGHT / 3 + LANE_HEIGHT * i + DELIMITER_HEIGHT * i);
+    const car = new Car(0, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`);
+    car.draw(ctx);
   }
 }
 
@@ -34,11 +35,17 @@ function drawDashedPath(ctx, start, width) {
   }
 }
 
-function drawCar(ctx, x, y) {
-  const car = new Image();
-  car.onload = () => {
-    ctx.drawImage(car, x, y, 200, 100);
-  };
+class Car {
+  constructor(x, lane, imageFileName) {
+    this.x = x;
+    this.lane = lane;
+    this.image = new Image();
+    this.image.src = imageFileName;
+  }
 
-  car.src = `pictures/car${Math.round(Math.random() * 8 + 1)}.png`;
+  draw(ctx) {
+    this.image.onload = () => {
+      ctx.drawImage(this.image, this.x, LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane, 200, 100);
+    };
+  }
 }
