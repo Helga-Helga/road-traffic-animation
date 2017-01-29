@@ -31,7 +31,7 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
 
-  if (Math.random() < 1 / 20) {
+  if (Math.random() < 1 / 50) {
     cars.push(new Car(-CAR_WIDTH, Math.random() * 10 + 1, Math.floor(Math.random() * (lanes + 1)), `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`));
   }
   cars.forEach((car, i) => {
