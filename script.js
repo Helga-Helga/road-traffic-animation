@@ -1,5 +1,5 @@
-const DELIMITER_HEIGHT = 4;
-const LANE_HEIGHT = 50;
+const DELIMITER_HEIGHT = 10;
+const LANE_HEIGHT = 200;
 
 function draw() {
   const canvas = document.getElementById('canvas');
