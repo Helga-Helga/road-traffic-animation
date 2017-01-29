@@ -52,13 +52,18 @@ class Car {
     this.lane = lane;
     this.image = new Image();
     this.image.src = imageFileName;
+    this.imageLoaded = false;
+    this.image.onload = () => {
+      this.imageLoaded = true;
+    };
   }
 
   draw(ctx) {
-    this.image.onload = () => {
+    if (!this.imageLoaded) {
+      return;
+    }
       const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
-      ctx.drawImage(this.image, this.x, y, 200, 100);
-    };
+      ctx.drawImage(this.image, this.x, y, CAR_HEIGHT * 2, CAR_HEIGHT);
   }
 
   move(newX) {
