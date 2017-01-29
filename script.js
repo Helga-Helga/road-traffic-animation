@@ -42,8 +42,8 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     currentCar.move(currentCar.velocity);
     currentCar.velocity += (Math.random() - 0.5) * 2;
     const isClose = cars
-      .filter((car) => {return car.lane === currentCar.lane && car !== currentCar})
-      .some((car) => {return currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5})
+      .filter(car => car.lane === currentCar.lane && car !== currentCar)
+      .some(car => currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5);
     if (currentCar.velocity < 0 || isClose) {
       currentCar.velocity = 0;
     }
