@@ -1,7 +1,11 @@
-const DELIMITER_HEIGHT = 10;
-const LANE_HEIGHT = 200;
-const DASH_WIDTH = 40;
-const DASH_SPACE_WIDTH = 80;
+const SCALE = 2;
+
+const DELIMITER_HEIGHT = 10 / SCALE;
+const LANE_HEIGHT = 200 / SCALE;
+const DASH_WIDTH = 40 / SCALE;
+const DASH_SPACE_WIDTH = 80 / SCALE;
+const CAR_HEIGHT = LANE_HEIGHT / 2;
+
 let time = 0;
 
 function draw(lanes = 2) {
