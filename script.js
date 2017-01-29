@@ -3,7 +3,7 @@ const LANE_HEIGHT = 200;
 const DASH_WIDTH = 40;
 const DASH_SPACE_WIDTH = 80;
 
-function draw(lanes=2) {
+function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
   if (!canvas.getContext) return;
   const ctx = canvas.getContext('2d');
@@ -45,7 +45,8 @@ class Car {
 
   draw(ctx) {
     this.image.onload = () => {
-      ctx.drawImage(this.image, this.x, LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane, 200, 100);
+      const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
+      ctx.drawImage(this.image, this.x, y, 200, 100);
     };
   }
 }
