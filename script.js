@@ -12,7 +12,11 @@ function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
   const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
   init(canvas, roadHeight);
-  redraw(canvas.getContext('2d'), roadHeight, lanes);
+  const cars = [];
+  for (let i = 0; i < lanes; i++) {
+    cars.push(new Car(- 50, Math.random() * 10 + 1, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`));
+  }
+  redraw(canvas.getContext('2d'), roadHeight, lanes, cars);
 }
 
 function init(canvas, roadHeight) {
@@ -47,8 +51,9 @@ function drawDashedPath(ctx, start, width) {
 }
 
 class Car {
-  constructor(x, lane, imageFileName) {
+  constructor(x, velocity, lane, imageFileName) {
     this.x = x;
+    this.velocity = velocity;
     this.lane = lane;
     this.image = new Image();
     this.image.src = imageFileName;
