@@ -5,14 +5,17 @@ const DASH_SPACE_WIDTH = 80;
 
 function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
-  if (!canvas.getContext) return;
-  const ctx = canvas.getContext('2d');
-
   const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
+  init(canvas, roadHeight);
+  redraw(canvas.getContext('2d'), roadHeight, lanes);
+}
 
+function init(canvas, roadHeight) {
   canvas.setAttribute('height', roadHeight);
   canvas.setAttribute('width', window.innerWidth - 20);
+}
 
+function redraw(ctx, roadHeight, lanes) {
   const road = new Path2D();
   road.rect(0, 0, canvas.width, roadHeight);
   ctx.fillStyle = 'gray';
