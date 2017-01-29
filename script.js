@@ -2,9 +2,9 @@ const SCALE = 2;
 
 const DELIMITER_HEIGHT = 10 / SCALE;
 const LANE_HEIGHT = 200 / SCALE;
-const DASH_WIDTH = 40 / SCALE;
-const DASH_SPACE_WIDTH = 80 / SCALE;
 const CAR_HEIGHT = LANE_HEIGHT / 2;
+const DASH_WIDTH = CAR_HEIGHT;
+const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 let time = 0;
 
