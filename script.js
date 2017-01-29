@@ -1,13 +1,12 @@
 const DELIMITER_HEIGHT = 10;
 const LANE_HEIGHT = 200;
 
-function draw() {
+function draw(lanes=2) {
   const canvas = document.getElementById('canvas');
   if (!canvas.getContext) return;
   const ctx = canvas.getContext('2d');
 
-  const LANES = 2;
-  const roadHeight = LANES * LANE_HEIGHT + (LANES - 1) * DELIMITER_HEIGHT;
+  const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
 
   canvas.setAttribute('width', 300);
   canvas.setAttribute('height', roadHeight);
