@@ -24,7 +24,7 @@ function init(canvas, roadHeight) {
   canvas.setAttribute('width', window.innerWidth - 20);
 }
 
-function redraw(ctx, roadHeight, lanes) {
+function redraw(ctx, roadHeight, lanes, cars) {
   const road = new Path2D();
   road.rect(0, 0, canvas.width, roadHeight);
   ctx.fillStyle = 'gray';
@@ -34,13 +34,19 @@ function redraw(ctx, roadHeight, lanes) {
     drawDashedPath(ctx, LANE_HEIGHT + LANE_HEIGHT * i + DELIMITER_HEIGHT * i, canvas.width);
   }
 
-  for (let i = 0; i < lanes + 1; i++) {
-    const vx = 1;
-    const car = new Car(time * vx, i, `pictures/car${Math.round(Math.random() * 8 + 1)}.png`);
+  cars.forEach((car) => {
+    if (car.x < window.innerWidth - 20 - 100) {
+      car.move(car.velocity);
+      car.velocity += (Math.random() - 0.5) * 2;
+      if (car.velocity < 0) {
+        car.velocity = 0;
+      }
+    }
     car.draw(ctx);
-  }
+  })
+
   time++;
-  setTimeout(window.requestAnimationFrame.bind(window, redraw.bind(this, ctx, roadHeight, 2)), 20);
+  setTimeout(window.requestAnimationFrame.bind(window, redraw.bind(this, ctx, roadHeight, lanes, cars)), 1000 / 25);
 }
 
 function drawDashedPath(ctx, start, width) {
