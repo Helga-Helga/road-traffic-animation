@@ -8,26 +8,27 @@ function draw(lanes=2) {
 
   const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
 
-  canvas.setAttribute('width', 300);
   canvas.setAttribute('height', roadHeight);
+  canvas.setAttribute('width', window.innerWidth - 20);
 
   const road = new Path2D();
-  road.rect(0, 0, 300, roadHeight);
+  road.rect(0, 0, canvas.width, roadHeight);
+  ctx.fillStyle = 'gray';
   ctx.fill(road);
 
-  for (let i = 0; i < LANES + 1; i++) {
-    drawDashedPath(ctx, LANE_HEIGHT + LANE_HEIGHT * i + DELIMITER_HEIGHT * i);
+  for (let i = 0; i < lanes + 1; i++) {
+    drawDashedPath(ctx, LANE_HEIGHT + LANE_HEIGHT * i + DELIMITER_HEIGHT * i, canvas.width);
   }
 
-  for (let i = 0; i < LANES + 1; i++) {
+  for (let i = 0; i < lanes + 1; i++) {
     drawCar(ctx, 0, LANE_HEIGHT / 3 + LANE_HEIGHT * i + DELIMITER_HEIGHT * i);
   }
 }
 
-function drawDashedPath(ctx, start) {
-  for (let i = 0; i < 20; i++) {
-    ctx.fillStyle = 'white';
-    ctx.fillRect(i * 40, start, 20, DELIMITER_HEIGHT);
+function drawDashedPath(ctx, start, width) {
+  ctx.fillStyle = 'white';
+  for (let i = 0; i < width / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
+    ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
   }
 }
 
