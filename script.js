@@ -4,6 +4,7 @@ const DELIMITER_HEIGHT = 10 / SCALE;
 const LANE_HEIGHT = 200 / SCALE;
 const CAR_HEIGHT = LANE_HEIGHT / 2;
 const CAR_WIDTH = CAR_HEIGHT * 2;
+const CAR_SPAWN_POINT = - CAR_WIDTH;
 const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
@@ -21,6 +22,24 @@ function init(canvas, roadHeight) {
   canvas.setAttribute('width', window.innerWidth - 20);
 }
 
+function getFreeLanes (cars, lanes) {
+  const freeLanes = [];
+  for (let i = 0; i < lanes; i++) {
+    freeLanes.push(i);
+  }
+  cars
+    .filter(car => car.x < CAR_SPAWN_POINT + CAR_WIDTH * 1.5)
+    .forEach((car, i) => {
+      delete freeLanes[car.lane];
+      });
+  return freeLanes.filter(lane => lane !== undefined);
+}
+
+function spawnCar (cars, freeLanes, x, velocity, imageFileName) {
+  const lane = freeLanes[Math.floor(Math.random()*freeLanes.length)];
+  cars.push(new Car(x, velocity, lane, imageFileName));
+}
+
 function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   const road = new Path2D();
   road.rect(0, 0, roadWidth, roadHeight);
@@ -31,8 +50,10 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
 
-  if (Math.random() < 1 / 50) {
-    cars.push(new Car(-CAR_WIDTH, Math.random() * 10 + 1, Math.floor(Math.random() * (lanes + 1)), `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`));
+  const freeLanes = getFreeLanes(cars, lanes);
+  console.log(freeLanes);
+  if (Math.random() < 1/50 && freeLanes.length > 0) {
+    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`);
   }
   cars.forEach((currentCar, i) => {
     if (currentCar.x > window.innerWidth - 20) {
