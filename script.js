@@ -9,53 +9,64 @@ const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 window.onload = () => {
-  const scene = new Scene();
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const lanesAmount = 2;
+  const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
+  const roadWidth = window.innerWidth - 20;
+  const scene = new Scene(canvas, ctx, lanesAmount, roadHeight, roadWidth);
   scene.draw();
 };
 
 class Scene {
-  draw(lanes = 2) {
-    const canvas = document.getElementById('canvas');
-    const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
-    this.initializeViewport(canvas, roadHeight);
-    this.redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+  constructor(canvas, ctx, lanes, roadHeight, roadWidth) {
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.lanes = lanes;
+    this.roadHeight = roadHeight;
+    this.roadWidth = roadWidth;
   }
 
-  initializeViewport(canvas, roadHeight) {
-    canvas.setAttribute('height', roadHeight);
-    canvas.setAttribute('width', window.innerWidth - 20);
+  draw() {
+    this.initializeViewport(this.canvas);
+    this.redraw([]);
   }
 
-  redraw(ctx, roadHeight, roadWidth, lanes, cars) {
-    this.drawRoad(ctx, roadHeight, roadWidth, lanes);
-    const freeLanes = getFreeLanes(cars, lanes);
+  initializeViewport(canvas) {
+    canvas.setAttribute('height', this.roadHeight);
+    canvas.setAttribute('width', this.roadWidth);
+  }
+
+  redraw(cars) {
+    this.drawRoad();
+    const freeLanes = getFreeLanes(cars, this.lanes);
     if (newCarNeeded(freeLanes)) {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
     }
-    moveCars(ctx, cars);
-    this.requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
+    moveCars(this.ctx, cars);
+    this.requestNextFrame(cars);
   }
 
-  drawRoad(ctx, roadHeight, roadWidth, lanes) {
+  drawRoad() {
     const road = new Path2D();
-    road.rect(0, 0, roadWidth, roadHeight);
-    ctx.fillStyle = 'gray';
-    ctx.fill(road);
+    road.rect(0, 0, this.roadWidth, this.roadHeight);
+    this.ctx.fillStyle = 'gray';
+    this.ctx.fill(road);
 
-    for (let i = 0; i < lanes; i++) {
-      this.drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
+    for (let i = 0; i < this.lanes; i++) {
+      this.drawDashedPath(LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i);
     }
   }
 
-  drawDashedPath(ctx, start, width) {
-    ctx.fillStyle = 'white';
-    for (let i = 0; i < width / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
-      ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
+  drawDashedPath(start) {
+    this.ctx.fillStyle = 'white';
+    for (let i = 0; i < this.roadWidth / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
+      this.ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
     }
   }
 
-  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
-    const onNextFrame = this.redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
+  requestNextFrame(cars) {
+    const onNextFrame = this.redraw.bind(this, cars);
     setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
   }
 }
