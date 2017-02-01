@@ -1,5 +1,3 @@
-window.onload = draw.bind(this, 2);
-
 const SCALE = 2;
 
 const DELIMITER_HEIGHT = 10 / SCALE;
@@ -9,6 +7,10 @@ const CAR_WIDTH = CAR_HEIGHT * 2;
 const CAR_SPAWN_POINT = -CAR_WIDTH;
 const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
+
+window.onload = () => {
+  draw();
+};
 
 function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
