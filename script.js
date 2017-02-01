@@ -27,13 +27,31 @@ class Scene {
   }
 
   redraw(ctx, roadHeight, roadWidth, lanes, cars) {
-    drawRoad(ctx, roadHeight, roadWidth, lanes);
+    this.drawRoad(ctx, roadHeight, roadWidth, lanes);
     const freeLanes = getFreeLanes(cars, lanes);
     if (newCarNeeded(freeLanes)) {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
     }
     moveCars(ctx, cars);
     this.requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
+  }
+
+  drawRoad(ctx, roadHeight, roadWidth, lanes) {
+    const road = new Path2D();
+    road.rect(0, 0, roadWidth, roadHeight);
+    ctx.fillStyle = 'gray';
+    ctx.fill(road);
+
+    for (let i = 0; i < lanes; i++) {
+      this.drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
+    }
+  }
+
+  drawDashedPath(ctx, start, width) {
+    ctx.fillStyle = 'white';
+    for (let i = 0; i < width / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
+      ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
+    }
   }
 
   requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
@@ -65,17 +83,6 @@ function spawnCar(cars, freeLanes, x, velocity, imageFileName) {
   cars.push(new Car(x, velocity, lane, imageFileName));
 }
 
-function drawRoad(ctx, roadHeight, roadWidth, lanes) {
-  const road = new Path2D();
-  road.rect(0, 0, roadWidth, roadHeight);
-  ctx.fillStyle = 'gray';
-  ctx.fill(road);
-
-  for (let i = 0; i < lanes; i++) {
-    drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
-  }
-}
-
 function newCarNeeded(freeLanes) {
   if (Math.random() < 1 / 50 && freeLanes.length > 0) {
     return true;
@@ -99,13 +106,6 @@ function moveCars(ctx, cars) {
     }
     currentCar.draw(ctx);
   });
-}
-
-function drawDashedPath(ctx, start, width) {
-  ctx.fillStyle = 'white';
-  for (let i = 0; i < width / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
-    ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
-  }
 }
 
 class Car {
