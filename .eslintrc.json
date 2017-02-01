@@ -20,7 +20,6 @@
       "allowSamePrecedence": true
       }
     ],
-    "no-unused-vars": ["warn"],
     "no-use-before-define": ["error", { "functions": false, "classes": false }],
     "no-plusplus": ["off"],
     "no-param-reassign": ["off"]
