@@ -17,8 +17,13 @@ class Scene {
   draw(lanes = 2) {
     const canvas = document.getElementById('canvas');
     const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
-    initializeViewport(canvas, roadHeight);
+    this.initializeViewport(canvas, roadHeight);
     this.redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+  }
+
+  initializeViewport(canvas, roadHeight) {
+    canvas.setAttribute('height', roadHeight);
+    canvas.setAttribute('width', window.innerWidth - 20);
   }
 
   redraw(ctx, roadHeight, roadWidth, lanes, cars) {
@@ -35,11 +40,6 @@ class Scene {
     const onNextFrame = this.redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
     setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
   }
-}
-
-function initializeViewport(canvas, roadHeight) {
-  canvas.setAttribute('height', roadHeight);
-  canvas.setAttribute('width', window.innerWidth - 20);
 }
 
 function getFreeLanes(cars, lanes) {
