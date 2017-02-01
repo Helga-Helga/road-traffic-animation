@@ -9,14 +9,20 @@ const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 window.onload = () => {
-  draw();
+  scene = new Scene();
+  scene.draw();
 };
 
-function draw(lanes = 2) {
-  const canvas = document.getElementById('canvas');
-  const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
-  init(canvas, roadHeight);
-  redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+class Scene {
+  constructor() {
+  }
+
+  draw(lanes = 2) {
+    const canvas = document.getElementById('canvas');
+    const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
+    init(canvas, roadHeight);
+    redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+  }
 }
 
 function init(canvas, roadHeight) {
