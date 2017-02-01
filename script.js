@@ -22,6 +22,16 @@ function init(canvas, roadHeight) {
   canvas.setAttribute('width', window.innerWidth - 20);
 }
 
+function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
+  drawRoad(ctx, roadHeight, roadWidth, lanes);
+  const freeLanes = getFreeLanes(cars, lanes);
+  if (newCarNeeded(freeLanes)) {
+    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
+  }
+  moveCars(ctx, cars);
+  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
+}
+
 function getFreeLanes(cars, lanes) {
   const freeLanes = [];
   for (let i = 0; i < lanes; i++) {
@@ -85,16 +95,6 @@ function requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
   time++;
   const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
   setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
-}
-
-function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
-  drawRoad(ctx, roadHeight, roadWidth, lanes);
-  const freeLanes = getFreeLanes(cars, lanes);
-  if (newCarNeeded(freeLanes)) {
-    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
-  }
-  moveCars(ctx, cars);
-  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
 }
 
 function drawDashedPath(ctx, start, width) {
