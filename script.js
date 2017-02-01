@@ -10,8 +10,6 @@ const CAR_SPAWN_POINT = -CAR_WIDTH;
 const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
-let time = 0;
-
 function draw(lanes = 2) {
   const canvas = document.getElementById('canvas');
   const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
@@ -94,7 +92,6 @@ function moveCars(ctx, cars) {
 }
 
 function requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
-  time++;
   const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
   setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
 }
