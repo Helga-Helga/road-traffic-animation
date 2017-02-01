@@ -9,35 +9,37 @@ const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 window.onload = () => {
-  scene = new Scene();
+  const scene = new Scene();
   scene.draw();
 };
 
 class Scene {
-  constructor() {
-  }
-
   draw(lanes = 2) {
     const canvas = document.getElementById('canvas');
     const roadHeight = lanes * LANE_HEIGHT + (lanes - 1) * DELIMITER_HEIGHT;
-    init(canvas, roadHeight);
-    redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+    initializeViewport(canvas, roadHeight);
+    this.redraw(canvas.getContext('2d'), roadHeight, canvas.width, lanes, []);
+  }
+
+  redraw(ctx, roadHeight, roadWidth, lanes, cars) {
+    drawRoad(ctx, roadHeight, roadWidth, lanes);
+    const freeLanes = getFreeLanes(cars, lanes);
+    if (newCarNeeded(freeLanes)) {
+      spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
+    }
+    moveCars(ctx, cars);
+    this.requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
+  }
+
+  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
+    const onNextFrame = this.redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
+    setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
   }
 }
 
-function init(canvas, roadHeight) {
+function initializeViewport(canvas, roadHeight) {
   canvas.setAttribute('height', roadHeight);
   canvas.setAttribute('width', window.innerWidth - 20);
-}
-
-function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
-  drawRoad(ctx, roadHeight, roadWidth, lanes);
-  const freeLanes = getFreeLanes(cars, lanes);
-  if (newCarNeeded(freeLanes)) {
-    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
-  }
-  moveCars(ctx, cars);
-  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
 }
 
 function getFreeLanes(cars, lanes) {
@@ -97,11 +99,6 @@ function moveCars(ctx, cars) {
     }
     currentCar.draw(ctx);
   });
-}
-
-function requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
-  const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
-  setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
 }
 
 function drawDashedPath(ctx, start, width) {
