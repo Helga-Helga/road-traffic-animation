@@ -60,8 +60,7 @@ class Scene {
 
   drawDashedPath(topY) {
     this.canvasContext.fillStyle = 'white';
-    for (let i = 0; i < this.roadWidth / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
-      const leftX = i * (DASH_WIDTH + DASH_SPACE_WIDTH);
+    for (let leftX = 0; leftX < this.roadWidth; leftX += DASH_WIDTH + DASH_SPACE_WIDTH) {
       this.canvasContext.fillRect(leftX, topY, DASH_WIDTH, DELIMITER_HEIGHT);
     }
   }
