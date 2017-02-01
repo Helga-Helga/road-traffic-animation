@@ -63,12 +63,7 @@ function newCarNeeded(freeLanes) {
   return false;
 }
 
-function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
-  drawRoad(ctx, roadHeight, roadWidth, lanes);
-  const freeLanes = getFreeLanes(cars, lanes);
-  if (newCarNeeded(freeLanes)) {
-    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
-  }
+function moveCars(ctx, cars) {
   cars.forEach((currentCar, i) => {
     if (currentCar.x > window.innerWidth - 20) {
       delete cars[i];
@@ -84,6 +79,15 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     }
     currentCar.draw(ctx);
   });
+}
+
+function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
+  drawRoad(ctx, roadHeight, roadWidth, lanes);
+  const freeLanes = getFreeLanes(cars, lanes);
+  if (newCarNeeded(freeLanes)) {
+    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
+  }
+  moveCars(ctx, cars);
 
   time++;
   const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
