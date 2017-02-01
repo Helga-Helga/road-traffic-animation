@@ -1,3 +1,5 @@
+window.onload = draw.bind(this, 2);
+
 const SCALE = 2;
 
 const DELIMITER_HEIGHT = 10 / SCALE;
