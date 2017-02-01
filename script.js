@@ -81,6 +81,12 @@ function moveCars(ctx, cars) {
   });
 }
 
+function requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars) {
+  time++;
+  const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
+  setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
+}
+
 function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   drawRoad(ctx, roadHeight, roadWidth, lanes);
   const freeLanes = getFreeLanes(cars, lanes);
@@ -88,10 +94,7 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
     spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
   }
   moveCars(ctx, cars);
-
-  time++;
-  const onNextFrame = redraw.bind(this, ctx, roadHeight, roadWidth, lanes, cars);
-  setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
+  requestNextFrame(ctx, roadHeight, roadWidth, lanes, cars);
 }
 
 function drawDashedPath(ctx, start, width) {
