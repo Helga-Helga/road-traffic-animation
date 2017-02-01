@@ -45,7 +45,7 @@ function spawnCar(cars, freeLanes, x, velocity, imageFileName) {
   cars.push(new Car(x, velocity, lane, imageFileName));
 }
 
-function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
+function drawRoad(ctx, roadHeight, roadWidth, lanes) {
   const road = new Path2D();
   road.rect(0, 0, roadWidth, roadHeight);
   ctx.fillStyle = 'gray';
@@ -54,7 +54,10 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   for (let i = 0; i < lanes; i++) {
     drawDashedPath(ctx, LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i, roadWidth);
   }
+}
 
+function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
+  drawRoad(ctx, roadHeight, roadWidth, lanes);
   const freeLanes = getFreeLanes(cars, lanes);
   if (Math.random() < 1 / 50 && freeLanes.length > 0) {
     spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
