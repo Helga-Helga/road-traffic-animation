@@ -35,6 +35,11 @@ function getFreeLanes(cars, lanes) {
   return freeLanes.filter(lane => lane !== undefined);
 }
 
+function getImageFileName() {
+  const imageFileName = `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`;
+  return imageFileName;
+}
+
 function spawnCar(cars, freeLanes, x, velocity, imageFileName) {
   const lane = freeLanes[Math.floor(Math.random() * freeLanes.length)];
   cars.push(new Car(x, velocity, lane, imageFileName));
@@ -52,7 +57,7 @@ function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
 
   const freeLanes = getFreeLanes(cars, lanes);
   if (Math.random() < 1 / 50 && freeLanes.length > 0) {
-    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`);
+    spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
   }
   cars.forEach((currentCar, i) => {
     if (currentCar.x > window.innerWidth - 20) {
