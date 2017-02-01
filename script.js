@@ -56,10 +56,17 @@ function drawRoad(ctx, roadHeight, roadWidth, lanes) {
   }
 }
 
+function newCarNeeded(freeLanes) {
+  if (Math.random() < 1 / 50 && freeLanes.length > 0) {
+    return true;
+  }
+  return false;
+}
+
 function redraw(ctx, roadHeight, roadWidth, lanes, cars) {
   drawRoad(ctx, roadHeight, roadWidth, lanes);
   const freeLanes = getFreeLanes(cars, lanes);
-  if (Math.random() < 1 / 50 && freeLanes.length > 0) {
+  if (newCarNeeded(freeLanes)) {
     spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
   }
   cars.forEach((currentCar, i) => {
