@@ -10,18 +10,18 @@ const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 window.onload = () => {
   const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+  const canvasContext = canvas.getContext('2d');
   const lanesAmount = 2;
   const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
   const roadWidth = window.innerWidth - 20;
-  const scene = new Scene(canvas, ctx, lanesAmount, roadHeight, roadWidth);
+  const scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth);
   scene.draw();
 };
 
 class Scene {
-  constructor(canvas, ctx, lanes, roadHeight, roadWidth) {
+  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth) {
     this.canvas = canvas;
-    this.ctx = ctx;
+    this.canvasContext = canvasContext;
     this.lanes = lanes;
     this.roadHeight = roadHeight;
     this.roadWidth = roadWidth;
@@ -32,9 +32,9 @@ class Scene {
     this.redraw([]);
   }
 
-  initializeViewport(canvas) {
-    canvas.setAttribute('height', this.roadHeight);
-    canvas.setAttribute('width', this.roadWidth);
+  initializeViewport() {
+    this.canvas.setAttribute('height', this.roadHeight);
+    this.canvas.setAttribute('width', this.roadWidth);
   }
 
   redraw(cars) {
@@ -43,25 +43,26 @@ class Scene {
     if (newCarNeeded(freeLanes)) {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
     }
-    moveCars(this.ctx, cars);
+    moveCars(this.canvasContext, cars);
     this.requestNextFrame(cars);
   }
 
   drawRoad() {
     const road = new Path2D();
     road.rect(0, 0, this.roadWidth, this.roadHeight);
-    this.ctx.fillStyle = 'gray';
-    this.ctx.fill(road);
+    this.canvasContext.fillStyle = 'gray';
+    this.canvasContext.fill(road);
 
     for (let i = 0; i < this.lanes; i++) {
       this.drawDashedPath(LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i);
     }
   }
 
-  drawDashedPath(start) {
-    this.ctx.fillStyle = 'white';
+  drawDashedPath(topY) {
+    this.canvasContext.fillStyle = 'white';
     for (let i = 0; i < this.roadWidth / (DASH_WIDTH + DASH_SPACE_WIDTH); i++) {
-      this.ctx.fillRect(i * (DASH_WIDTH + DASH_SPACE_WIDTH), start, DASH_WIDTH, DELIMITER_HEIGHT);
+      const leftX = i * (DASH_WIDTH + DASH_SPACE_WIDTH);
+      this.canvasContext.fillRect(leftX, topY, DASH_WIDTH, DELIMITER_HEIGHT);
     }
   }
 
@@ -101,7 +102,7 @@ function newCarNeeded(freeLanes) {
   return false;
 }
 
-function moveCars(ctx, cars) {
+function moveCars(canvasContext, cars) {
   cars.forEach((currentCar, i) => {
     if (currentCar.x > window.innerWidth - 20) {
       delete cars[i];
@@ -115,7 +116,7 @@ function moveCars(ctx, cars) {
     if (currentCar.velocity < 0 || isClose) {
       currentCar.velocity = 0;
     }
-    currentCar.draw(ctx);
+    currentCar.draw(canvasContext);
   });
 }
 
@@ -132,12 +133,12 @@ class Car {
     };
   }
 
-  draw(ctx) {
+  draw(canvasContext) {
     if (!this.imageLoaded) {
       return;
     }
     const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
-    ctx.drawImage(this.image, this.x, y, CAR_WIDTH, CAR_HEIGHT);
+    canvasContext.drawImage(this.image, this.x, y, CAR_WIDTH, CAR_HEIGHT);
   }
 
   move(dx) {
