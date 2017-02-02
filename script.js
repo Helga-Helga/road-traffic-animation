@@ -11,7 +11,7 @@ const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 window.onload = () => {
   const canvas = document.getElementById('canvas');
   const canvasContext = canvas.getContext('2d');
-  const lanesAmount = 2;
+  const lanesAmount = 4;
   const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
   const roadWidth = window.innerWidth - 20;
   const scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth);
