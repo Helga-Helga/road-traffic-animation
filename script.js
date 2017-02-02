@@ -11,28 +11,31 @@ const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 window.onload = () => {
   let scene = null;
   document.getElementById('submit').onclick = () => {
-    let isStopped = false;
-    if (scene !== null) {
-      isStopped = true;
+    if (scene != null) {
+      scene.stop();
     }
     const canvas = document.getElementById('canvas');
     const canvasContext = canvas.getContext('2d');
     const lanesAmount = parseInt(document.getElementById('lanes').value, 10);
     const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
     const roadWidth = window.innerWidth - 20;
-    scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth, isStopped);
+    scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth);
     scene.draw();
   };
 };
 
 class Scene {
-  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth, isStopped) {
+  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth) {
     this.canvas = canvas;
     this.canvasContext = canvasContext;
     this.lanes = lanes;
     this.roadHeight = roadHeight;
     this.roadWidth = roadWidth;
-    this.isStopped = isStopped;
+    this.isStopped = false;
+  }
+
+  stop() {
+    this.isStopped = true;
   }
 
   draw() {
