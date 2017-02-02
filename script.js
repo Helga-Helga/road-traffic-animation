@@ -9,22 +9,30 @@ const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 
 window.onload = () => {
-  const canvas = document.getElementById('canvas');
-  const canvasContext = canvas.getContext('2d');
-  const lanesAmount = 4;
-  const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
-  const roadWidth = window.innerWidth - 20;
-  const scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth);
-  scene.draw();
+  let scene = null;
+  document.getElementById('submit').onclick = () => {
+    let isStopped = false;
+    if (scene !== null) {
+      isStopped = true;
+    }
+    const canvas = document.getElementById('canvas');
+    const canvasContext = canvas.getContext('2d');
+    const lanesAmount = parseInt(document.getElementById('lanes').value, 10);
+    const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
+    const roadWidth = window.innerWidth - 20;
+    scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth, isStopped);
+    scene.draw();
+  };
 };
 
 class Scene {
-  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth) {
+  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth, isStopped) {
     this.canvas = canvas;
     this.canvasContext = canvasContext;
     this.lanes = lanes;
     this.roadHeight = roadHeight;
     this.roadWidth = roadWidth;
+    this.isStopped = isStopped;
   }
 
   draw() {
@@ -44,14 +52,14 @@ class Scene {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
     }
     moveCars(this.canvasContext, cars);
-    this.requestNextFrame(cars);
+    if (!this.isStopped) {
+      this.requestNextFrame(cars);
+    }
   }
 
   drawRoad() {
-    const road = new Path2D();
-    road.rect(0, 0, this.roadWidth, this.roadHeight);
     this.canvasContext.fillStyle = 'gray';
-    this.canvasContext.fill(road);
+    this.canvasContext.fillRect(0, this.canvas.style.top, this.roadWidth, this.roadHeight);
 
     for (let i = 0; i < this.lanes; i++) {
       this.drawDashedPath(LANE_HEIGHT + (LANE_HEIGHT + DELIMITER_HEIGHT) * i);
