@@ -7,6 +7,8 @@ const CAR_WIDTH = CAR_HEIGHT * 2;
 const CAR_SPAWN_POINT = -CAR_WIDTH;
 const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
+const FRAMES_PER_SECOND = 25;
+const FRAMES_PER_MINUTE = FRAMES_PER_SECOND * 60;
 
 window.onload = () => {
   let scene = null;
@@ -78,7 +80,7 @@ class Scene {
 
   requestNextFrame(cars) {
     const onNextFrame = this.redraw.bind(this, cars);
-    setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / 25);
+    setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / FRAMES_PER_SECOND);
   }
 }
 
@@ -106,7 +108,7 @@ function spawnCar(cars, freeLanes, x, velocity, imageFileName) {
 }
 
 function newCarNeeded(freeLanes) {
-  if (Math.random() < 1 / 50 && freeLanes.length > 0) {
+  if (Math.random() < parseInt(document.getElementById('expectedValue').value, 10) / FRAMES_PER_MINUTE && freeLanes.length > 0) {
     return true;
   }
   return false;
