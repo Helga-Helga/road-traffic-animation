@@ -12,16 +12,16 @@ const FRAMES_PER_MINUTE = FRAMES_PER_SECOND * 60;
 
 window.onload = () => {
   let scene = null;
+  Car.images = [];
+  const images = Car.getImages();
+  for (let i = 1; i < 10; i++) {
+    const image = new Image();
+    image.src = `pictures/car${i}.png`;
+    images.push(image);
+  }
   document.getElementById('submit').onclick = () => {
     if (scene != null) {
       scene.stop();
-    }
-    Car.images = [];
-    const images = Car.getImages();
-    for (let i = 1; i < 10; i++) {
-      const image = new Image();
-      image.src = `pictures/car${i}.png`;
-      images.push(image);
     }
     const canvas = document.getElementById('canvas');
     const canvasContext = canvas.getContext('2d');
