@@ -16,6 +16,13 @@ window.onload = () => {
     if (scene != null) {
       scene.stop();
     }
+    Car.images = [];
+    const images = Car.getImages();
+    for (let i = 1; i < 10; i++) {
+      const image = new Image();
+      image.src = `pictures/car${i}.png`;
+      images.push(image);
+    }
     const canvas = document.getElementById('canvas');
     const canvasContext = canvas.getContext('2d');
     const lanesAmount = parseInt(document.getElementById('lanes').value, 10);
@@ -54,7 +61,7 @@ class Scene {
     this.drawRoad();
     const freeLanes = getFreeLanes(cars, this.lanes);
     if (newCarNeeded(freeLanes)) {
-      spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1, getImageFileName());
+      spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1);
     }
     moveCars(this.canvasContext, cars);
     if (!this.isStopped) {
@@ -97,14 +104,14 @@ function getFreeLanes(cars, lanes) {
   return freeLanes.filter(lane => lane !== undefined);
 }
 
-function getImageFileName() {
-  const imageFileName = `pictures/car${Math.floor(Math.random() * 8 + 1)}.png`;
-  return imageFileName;
+function getImage() {
+  const image = Car.images[Math.floor(Math.random() * (Car.images.length - 1) + 1)];
+  return image;
 }
 
-function spawnCar(cars, freeLanes, x, velocity, imageFileName) {
+function spawnCar(cars, freeLanes, x, velocity) {
   const lane = freeLanes[Math.floor(Math.random() * freeLanes.length)];
-  cars.push(new Car(x, velocity, lane, imageFileName));
+  cars.push(new Car(x, velocity, lane, getImage()));
 }
 
 function newCarNeeded(freeLanes) {
@@ -133,22 +140,18 @@ function moveCars(canvasContext, cars) {
 }
 
 class Car {
-  constructor(x, velocity, lane, imageFileName) {
+  static getImages() {
+    return Car.images;
+  }
+
+  constructor(x, velocity, lane, image) {
     this.x = x;
     this.velocity = velocity;
     this.lane = lane;
-    this.image = new Image();
-    this.image.src = imageFileName;
-    this.imageLoaded = false;
-    this.image.onload = () => {
-      this.imageLoaded = true;
-    };
+    this.image = image;
   }
 
   draw(canvasContext) {
-    if (!this.imageLoaded) {
-      return;
-    }
     const y = LANE_HEIGHT / 3 + LANE_HEIGHT * this.lane + DELIMITER_HEIGHT * this.lane;
     canvasContext.drawImage(this.image, this.x, y, CAR_WIDTH, CAR_HEIGHT);
   }
