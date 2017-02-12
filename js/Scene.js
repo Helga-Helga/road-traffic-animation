@@ -72,26 +72,26 @@ class Scene {
     const canMoveDown = !isClose(cars, currentCar, currentCar.lane + 1);
     if (currentCar.lane === 0) {
       if (canMoveDown) {
-        changeLane(currentCar, currentCar.lane + 1);
+        currentCar.changeLane(currentCar.lane + 1);
       } else {
         currentCar.velocity = 0;
       }
     } else if (currentCar.lane === this.lanes - 1) {
       if (canMoveUp) {
-        changeLane(currentCar, currentCar.lane - 1);
+        currentCar.changeLane(currentCar.lane - 1);
       } else {
         currentCar.velocity = 0;
       }
     } else if (canMoveUp && canMoveDown) {
       if (Math.random() < 0.5) {
-        changeLane(currentCar, currentCar.lane - 1);
+        currentCar.changeLane(currentCar.lane - 1);
       } else {
-        changeLane(currentCar, currentCar.lane + 1);
+        currentCar.changeLane(currentCar.lane + 1);
       }
     } else if (canMoveUp) {
-      changeLane(currentCar, currentCar.lane - 1);
+      currentCar.changeLane(currentCar.lane - 1);
     } else if (canMoveDown) {
-      changeLane(currentCar, currentCar.lane + 1);
+      currentCar.changeLane(currentCar.lane + 1);
     } else {
       currentCar.velocity = 0;
     }

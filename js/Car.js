@@ -18,4 +18,8 @@ class Car {
   move(dx) {
     this.x += dx;
   }
+
+  changeLane(newLane) {
+    this.lane = newLane;
+  }
 }

@@ -26,7 +26,3 @@ function isClose(cars, currentCar, lane = currentCar.lane) {
     .filter(car => car.lane === lane && car !== currentCar)
     .some(car => currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5);
 }
-
-function changeLane(car, newLane) {
-  car.lane = newLane;
-}
