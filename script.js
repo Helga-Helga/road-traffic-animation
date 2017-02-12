@@ -79,9 +79,58 @@ class Scene {
     if (newCarNeeded(freeLanes)) {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1);
     }
-    moveCars(this.canvasContext, cars);
+    this.moveCars(cars);
     if (!this.isStopped) {
       this.requestNextFrame(cars);
+    }
+  }
+
+  moveCars(cars) {
+    cars.forEach((currentCar, i) => {
+      if (currentCar.x > window.innerWidth - 20) {
+        delete cars[i];
+        return;
+      }
+      currentCar.move(currentCar.velocity);
+      currentCar.velocity += (Math.random() - 0.5) * 2;
+
+      if (currentCar.velocity < 0) {
+        currentCar.velocity = 0;
+      }
+      if (isClose(cars, currentCar)) {
+        this.changeLane(cars, currentCar);
+      }
+      currentCar.draw(this.canvasContext);
+    });
+  }
+
+  changeLane(cars, currentCar) {
+    const canMoveUp = !isClose(cars, currentCar, currentCar.lane - 1);
+    const canMoveDown = !isClose(cars, currentCar, currentCar.lane + 1);
+    if (currentCar.lane === 0) {
+      if (canMoveDown) {
+        changeLane(currentCar, currentCar.lane + 1);
+      } else {
+        currentCar.velocity = 0;
+      }
+    } else if (currentCar.lane === this.lanes - 1) {
+      if (canMoveUp) {
+        changeLane(currentCar, currentCar.lane - 1);
+      } else {
+        currentCar.velocity = 0;
+      }
+    } else if (canMoveUp && canMoveDown) {
+      if (Math.random() < 0.5) {
+        changeLane(currentCar, currentCar.lane - 1);
+      } else {
+        changeLane(currentCar, currentCar.lane + 1);
+      }
+    } else if (canMoveUp) {
+      changeLane(currentCar, currentCar.lane - 1);
+    } else if (canMoveDown) {
+      changeLane(currentCar, currentCar.lane + 1);
+    } else {
+      currentCar.velocity = 0;
     }
   }
 
@@ -137,22 +186,14 @@ function newCarNeeded(freeLanes) {
   return false;
 }
 
-function moveCars(canvasContext, cars) {
-  cars.forEach((currentCar, i) => {
-    if (currentCar.x > window.innerWidth - 20) {
-      delete cars[i];
-      return;
-    }
-    currentCar.move(currentCar.velocity);
-    currentCar.velocity += (Math.random() - 0.5) * 2;
-    const isClose = cars
-      .filter(car => car.lane === currentCar.lane && car !== currentCar)
-      .some(car => currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5);
-    if (currentCar.velocity < 0 || isClose) {
-      currentCar.velocity = 0;
-    }
-    currentCar.draw(canvasContext);
-  });
+function isClose(cars, currentCar, lane = currentCar.lane) {
+  return cars
+    .filter(car => car.lane === lane && car !== currentCar)
+    .some(car => currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5);
+}
+
+function changeLane(car, newLane) {
+  car.lane = newLane;
 }
 
 class Car {
