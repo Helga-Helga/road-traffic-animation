@@ -31,19 +31,21 @@ window.onload = () => {
     const lanesAmount = parseInt(document.getElementById('lanes').value, 10);
     const roadHeight = lanesAmount * LANE_HEIGHT + (lanesAmount - 1) * DELIMITER_HEIGHT;
     const roadWidth = window.innerWidth - 20;
-    scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth);
+    const carsPerMinute = parseInt(document.getElementById('expectedValue').value, 10);
+    scene = new Scene(canvas, canvasContext, lanesAmount, roadHeight, roadWidth, carsPerMinute);
     scene.draw();
   };
 };
 
 class Scene {
-  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth) {
+  constructor(canvas, canvasContext, lanes, roadHeight, roadWidth, carsPerMinute) {
     this.canvas = canvas;
     this.canvasContext = canvasContext;
     this.lanes = lanes;
     this.roadHeight = roadHeight;
     this.roadWidth = roadWidth;
     this.isStopped = false;
+    this.carsPerMinute = carsPerMinute;
   }
 
   static increaseProgress() {
@@ -76,7 +78,7 @@ class Scene {
   redraw(cars) {
     this.drawRoad();
     const freeLanes = getFreeLanes(cars, this.lanes);
-    if (newCarNeeded(freeLanes)) {
+    if (this.newCarNeeded(freeLanes)) {
       spawnCar(cars, freeLanes, CAR_SPAWN_POINT, Math.random() * 10 + 1);
     }
     this.moveCars(cars);
@@ -154,6 +156,13 @@ class Scene {
     const onNextFrame = this.redraw.bind(this, cars);
     setTimeout(window.requestAnimationFrame.bind(window, onNextFrame), 1000 / FRAMES_PER_SECOND);
   }
+
+  newCarNeeded(freeLanes) {
+    if (Math.random() < this.carsPerMinute / FRAMES_PER_MINUTE && freeLanes.length > 0) {
+      return true;
+    }
+    return false;
+  }
 }
 
 function getFreeLanes(cars, lanes) {
@@ -177,13 +186,6 @@ function getImage() {
 function spawnCar(cars, freeLanes, x, velocity) {
   const lane = freeLanes[Math.floor(Math.random() * freeLanes.length)];
   cars.push(new Car(x, velocity, lane, getImage()));
-}
-
-function newCarNeeded(freeLanes) {
-  if (Math.random() < parseInt(document.getElementById('expectedValue').value, 10) / FRAMES_PER_MINUTE && freeLanes.length > 0) {
-    return true;
-  }
-  return false;
 }
 
 function isClose(cars, currentCar, lane = currentCar.lane) {
