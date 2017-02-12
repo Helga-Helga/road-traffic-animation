@@ -9,16 +9,19 @@ const DASH_WIDTH = CAR_HEIGHT;
 const DASH_SPACE_WIDTH = DASH_WIDTH * 2;
 const FRAMES_PER_SECOND = 25;
 const FRAMES_PER_MINUTE = FRAMES_PER_SECOND * 60;
+const ITEMS_TO_LOAD = 9;
 
 window.onload = () => {
   let scene = null;
   Car.images = [];
   const images = Car.getImages();
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i <= ITEMS_TO_LOAD; i++) {
     const image = new Image();
     image.src = `pictures/car${i}.png`;
     images.push(image);
+    image.onload = Scene.increaseProgress;
   }
+
   document.getElementById('submit').onclick = () => {
     if (scene != null) {
       scene.stop();
@@ -41,6 +44,19 @@ class Scene {
     this.roadHeight = roadHeight;
     this.roadWidth = roadWidth;
     this.isStopped = false;
+  }
+
+  static increaseProgress() {
+    if (!Scene.loadedItems) {
+      Scene.loadedItems = 0;
+    }
+    Scene.loadedItems++;
+    const progressBar = document.getElementById('progress');
+    progressBar.innerHTML = `Loading ${(Scene.loadedItems * 100) / ITEMS_TO_LOAD}%`;
+    if (Scene.loadedItems === ITEMS_TO_LOAD) {
+      progressBar.style.display = 'none';
+      document.getElementById('form').style.display = 'block';
+    }
   }
 
   stop() {
