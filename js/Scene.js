@@ -15,7 +15,7 @@ class Scene {
     }
     Scene.loadedItems++;
     const progressBar = document.getElementById('progress');
-    progressBar.innerHTML = `Loading ${(Scene.loadedItems * 100) / ITEMS_TO_LOAD}%`;
+    progressBar.innerHTML = `Loading ${Math.round((Scene.loadedItems * 100) / ITEMS_TO_LOAD)}%`;
     if (Scene.loadedItems === ITEMS_TO_LOAD) {
       progressBar.style.display = 'none';
       document.getElementById('form').style.display = 'block';
