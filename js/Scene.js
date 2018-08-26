@@ -68,29 +68,31 @@ class Scene {
   }
 
   changeLane(cars, currentCar) {
-    const canMoveUp = !isClose(cars, currentCar, currentCar.lane - 1);
-    const canMoveDown = !isClose(cars, currentCar, currentCar.lane + 1);
+    const canMoveUp = (currentCar.newLane === undefined) && !isClose(cars, currentCar, currentCar.lane - 1, false);
+    const canMoveDown = (currentCar.newLane === undefined) && !isClose(cars, currentCar, currentCar.lane + 1, false);
+    const needMoveUp = (currentCar.newLane === undefined) && !isClose(cars, currentCar, currentCar.lane - 1);
+    const needMoveDown = (currentCar.newLane === undefined) && !isClose(cars, currentCar, currentCar.lane + 1);
     if (currentCar.lane === 0) {
-      if (canMoveDown) {
+      if (canMoveDown && needMoveDown) {
         currentCar.changeLane(currentCar.lane + 1);
       } else {
         currentCar.velocity = 0;
       }
     } else if (currentCar.lane === this.lanes - 1) {
-      if (canMoveUp) {
+      if (canMoveUp && needMoveUp) {
         currentCar.changeLane(currentCar.lane - 1);
       } else {
         currentCar.velocity = 0;
       }
-    } else if (canMoveUp && canMoveDown) {
+    } else if (canMoveUp && canMoveDown && needMoveUp && needMoveDown) {
       if (Math.random() < 0.5) {
         currentCar.changeLane(currentCar.lane - 1);
       } else {
         currentCar.changeLane(currentCar.lane + 1);
       }
-    } else if (canMoveUp) {
+    } else if (canMoveUp && needMoveUp) {
       currentCar.changeLane(currentCar.lane - 1);
-    } else if (canMoveDown) {
+    } else if (canMoveDown && needMoveDown) {
       currentCar.changeLane(currentCar.lane + 1);
     } else {
       currentCar.velocity = 0;

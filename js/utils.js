@@ -7,6 +7,7 @@ function getFreeLanes(cars, lanes) {
     .filter(car => car.x < CAR_SPAWN_POINT + CAR_WIDTH * 1.5)
     .forEach((car) => {
       delete freeLanes[car.lane];
+      delete freeLanes[car.newLane];
     });
   return freeLanes.filter(lane => lane !== undefined);
 }
@@ -21,8 +22,9 @@ function spawnCar(cars, freeLanes, x, velocity) {
   cars.push(new Car(x, velocity, lane, getImage()));
 }
 
-function isClose(cars, currentCar, lane = currentCar.lane) {
+function isClose(cars, currentCar, lane = currentCar.lane, forward=true) {
   return cars
-    .filter(car => car.lane === lane && car !== currentCar)
-    .some(car => currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5);
+    .filter(car => (car.lane === lane || car.newLane === lane) && car !== currentCar)
+    .some(car => forward ? (currentCar.x < car.x && car.x <= currentCar.x + CAR_WIDTH * 1.5) :
+                (car.x < currentCar.x && currentCar.x <= car.x + CAR_WIDTH * 1.5));
 }
